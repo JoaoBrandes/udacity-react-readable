@@ -20,7 +20,7 @@ class Dashboard extends Component {
         <div className='dashboard-list'>
           <h3 className='center'>Categories</h3>
           {this.props.categories.map((cat) => (
-              <Category key={cat.name} category={cat}/>
+            <Category key={cat.name} category={cat}/>
           ))}
         </div>
         <h3 className='center'>Your Timeline</h3>
@@ -40,17 +40,17 @@ class Dashboard extends Component {
 function mapStateToProps ({ posts, categories, listFilter }) {
   if (listFilter.order === 'time') {
     posts = posts.sort((a,b) =>
-        b.timestamp - a.timestamp
-      )
-  } else if (listFilter.order === 'score'){
-    posts = posts.sort((a,b) =>
-       b.voteScore - a.voteScore
-      )
-  }
-  return {
-    categories,
-    posts
-  }
+    b.timestamp - a.timestamp
+  )
+} else if (listFilter.order === 'score'){
+  posts = posts.sort((a,b) =>
+  b.voteScore - a.voteScore
+)
+}
+return {
+  categories,
+  posts
+}
 }
 
 export default connect(mapStateToProps)(Dashboard)

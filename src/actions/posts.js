@@ -2,11 +2,8 @@ import { addPostToServer, deletePostFromServer,
   deleteCommentFromServer, editPostToServer, editCommentToServer,
   votePost, voteComment } from '../utils/api'
 import { showLoading, hideLoading } from 'react-redux-loading'
+import { RECEIVE_POSTS, ADD_POST, DELETE_POST, EDIT_POST } from './types'
 
-export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-export const ADD_POST = 'ADD_POST'
-export const DELETE_POST = 'DELETE_POST'
-export const EDIT_POST = 'EDIT_POST'
 
 function addPost (post) {
   return {
@@ -86,7 +83,6 @@ export function handleUpvoteComment (comment) {
   return (dispatch, getState) => {
     dispatch(showLoading())
     return voteComment(comment.id, {option: "upVote"})
-      // .then(() => dispatch(editPost(comment)))
       .then(() => dispatch(hideLoading()))
   }
 }
@@ -95,7 +91,6 @@ export function handleDownvoteComment (comment) {
   return (dispatch, getState) => {
     dispatch(showLoading())
     return voteComment(comment.id, {option: "downVote"})
-      // .then(() => dispatch(editPost(comment)))
       .then(() => dispatch(hideLoading()))
   }
 }

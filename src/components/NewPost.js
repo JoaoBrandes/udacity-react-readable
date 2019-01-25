@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { addComment, getPostDetailsFromServer, getCommentDetailsFromServer } from '../utils/api'
 import { generateUID } from '../utils/helpers'
 import { Redirect } from 'react-router-dom'
-import { handleAddPost, handleEditPost, handleEditComment } from '../actions/posts'
+import * as actions from '../actions/posts'
 
 class NewPost extends Component {
   state = {
@@ -96,28 +96,27 @@ class NewPost extends Component {
   }
 
   editPost() {
-      const { dispatch, isComment } = this.props
-      const { body, title, post } = this.state
-      post.body = body
-      if (!isComment) {
-        post.title = title
-        dispatch(handleEditPost(post))
-      } else {
-        post.timestamp = new Date()
-        dispatch(handleEditComment(post))
-      }
+    const { isComment } = this.props
+    const { body, title, post } = this.state
+    post.body = body
+    if (!isComment) {
+      post.title = title
+      this.props.handleEditPost(post)
+    } else {
+      post.timestamp = new Date()
+      this.props.handleEditComment(post)
+    }
 
-      this.setState(() => ({
-        body: '',
-        author: '',
-        category: 'react',
-        toHome: true
-      }))
+    this.setState(() => ({
+      body: '',
+      author: '',
+      category: 'react',
+      toHome: true
+    }))
   }
 
   addNewPost() {
     const { body, author, category, title } = this.state
-    const { dispatch } = this.props
     const newPost = {
       id: generateUID(),
       timestamp: new Date(),
@@ -128,7 +127,7 @@ class NewPost extends Component {
       voteScore: 1
     }
 
-    dispatch(handleAddPost(newPost))
+    this.props.handleAddPost(newPost)
 
     this.setState(() => ({
       body: '',
@@ -174,73 +173,75 @@ class NewPost extends Component {
       <div>
         <h3 className='center'>{isEditing ? 'Edit post': 'Add new Post'}</h3>
         <div className='center'>
-        {parentPost === undefined && !isComment &&
-          categories.map((category) => (
+          {parentPost === undefined && !isComment &&
+            categories.map((category) => (
               <span key={category.name}>
-                  <input type="radio"
-                     value={category.name}
-                     disabled={isEditing}
-                     checked={this.state.category === category.name}
-                     onChange={this.handleCategoryChange} />{category.name}</span>
-          ))
-        }
-         </div>
-        <form className='new-post' onSubmit={this.handleSubmit}>
+                <input type="radio"
+                  value={category.name}
+                  disabled={isEditing}
+                  checked={this.state.category === category.name}
+                  onChange={this.handleCategoryChange} />{category.name}</span>
+              ))
+            }
+          </div>
+          <form className='new-post' onSubmit={this.handleSubmit}>
 
-          <input
-            type="text"
-            placeholder="Your Name"
-            value={author}
-            disabled={isEditing}
-            onChange={this.handleAuthorChange}
-
-          />
-        {parentPost === undefined && !isComment &&
             <input
               type="text"
-              placeholder="Title"
-              value={title}
+              placeholder="Your Name"
+              value={author}
+              disabled={isEditing}
+              onChange={this.handleAuthorChange}
 
-              onChange={this.handleTitleChange}
-            />
-          }
-          <textarea
-            placeholder= {parentPost === undefined ? "Your Post" : "Your comment"}
-            value={body}
-            onChange={this.handleBodyChange}
-            className='textarea'
-          />
+              />
+            {parentPost === undefined && !isComment &&
+              <input
+                type="text"
+                placeholder="Title"
+                value={title}
 
-          <button
-            className='btn'
-            type='submit'
-            disabled={body === ''}>
+                onChange={this.handleTitleChange}
+                />
+            }
+            <textarea
+              placeholder= {parentPost === undefined ? "Your Post" : "Your comment"}
+              value={body}
+              onChange={this.handleBodyChange}
+              className='textarea'
+              />
+
+            <button
+              className='btn'
+              type='submit'
+              disabled={body === ''}>
               Submit
-          </button>
-        </form>
-      </div>
-    )
-  }
-}
-
-function mapStateToProps ({ categories }, props) {
-  var postId = 0
-  var isComment = false
-  if (props.parentPost === undefined ) {
-    const { id } = props.match.params
-    if (id !== undefined) {
-      postId = id
-      if (props.match.path.includes("comments")) {
-        isComment = true
-      }
+            </button>
+          </form>
+        </div>
+      )
     }
   }
-  return {
-    categories,
-    postId,
-    isEditing: postId !== 0,
-    isComment
-  }
-}
 
-export default connect(mapStateToProps)(NewPost)
+  function mapStateToProps ({ categories }, props) {
+    var postId = 0
+    var isComment = false
+    if (props.parentPost === undefined ) {
+      const { id } = props.match.params
+      if (id !== undefined) {
+        postId = id
+        if (props.match.path.includes("comments")) {
+          isComment = true
+        }
+      }
+    }
+    return {
+      categories,
+      postId,
+      isEditing: postId !== 0,
+      isComment
+    }
+  }
+
+
+
+  export default connect(mapStateToProps, actions)(NewPost)

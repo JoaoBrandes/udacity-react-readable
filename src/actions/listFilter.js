@@ -1,5 +1,4 @@
-export const CHANGE_ORDER = 'CHANGE_ORDER'
-
+import { CHANGE_ORDER } from './types'
 export function changeOrder (order) {
   return {
     type: CHANGE_ORDER,

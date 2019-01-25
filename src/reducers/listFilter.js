@@ -1,4 +1,4 @@
-import { CHANGE_ORDER } from '../actions/listFilter'
+import { CHANGE_ORDER } from '../actions/types'
 
 export default function listFilter (state = {order:'score'}, action) {
   switch(action.type) {

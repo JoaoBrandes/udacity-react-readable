@@ -1,5 +1,5 @@
 import { RECEIVE_POSTS, ADD_POST,
-  DELETE_POST, EDIT_POST } from '../actions/posts'
+  DELETE_POST, EDIT_POST } from '../actions/types'
 
 export default function posts (state = [], action) {
   switch(action.type) {

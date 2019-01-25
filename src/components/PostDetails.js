@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import { getPostComments, getPostDetailsFromServer } from '../utils/api'
 import Comment from './Comment'
 import Post from './Post'
@@ -14,7 +14,8 @@ class PostDetails extends Component {
 
     this.state = {
       post: {},
-      commentList: []
+      commentList: [],
+      toError: false
     };
 
   }
@@ -22,9 +23,15 @@ class PostDetails extends Component {
   componentDidMount () {
     const { postId } = this.props
     getPostDetailsFromServer(postId).then((post) => {
-      this.setState(() => ({
-        post
-      }))
+      if (post.id === undefined) {
+        this.setState(() => ({
+          toError: true
+        }))
+      } else {
+        this.setState(() => ({
+          post
+        }))
+      }
     })
     getPostComments(postId).then((comments) => {
       this.setState(() => ({
@@ -65,25 +72,34 @@ class PostDetails extends Component {
     }))
   }
 
-  render() {
-    const { post, commentList } = this.state
+  _doRender() {
     return (
-        <Fragment>
-          {post.id !== undefined &&
-          <div>
-            <Post post={post} voteCallback={this.votePostCallback}/>
-            <NewPost parentPost={post.id} addNewComment={this.addNewComment} />
-            {commentList.length !== 0 && <h3 className='center'>Comments</h3>}
-            <ul>
-              {commentList.map((comment) => (
-                <li key={comment.id}>
-                  <Comment comment={comment} voteCallback={this.voteCommentCallback} removeComment={this.removeComment}/>
-                </li>
-              ))}
-            </ul>
-          </div>
-          }
-        </Fragment>
+      <div>
+        <Post post={post} voteCallback={this.votePostCallback}/>
+        <NewPost parentPost={post.id} addNewComment={this.addNewComment} />
+        {commentList.length !== 0 && <h3 className='center'>Comments</h3>}
+        <ul>
+          {commentList.map((comment) => (
+            <li key={comment.id}>
+              <Comment comment={comment} voteCallback={this.voteCommentCallback} removeComment={this.removeComment}/>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+
+  render() {
+    const { post, commentList, toError } = this.state
+    if (toError === true) {
+      return <Redirect to='/error' />
+    }
+    return (
+      <Fragment>
+        {post.id !== undefined &&
+          _doRender()
+        }
+      </Fragment>
 
     )
   }

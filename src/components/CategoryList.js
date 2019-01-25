@@ -11,7 +11,7 @@ class CategoryList extends Component {
         <div className='dashboard-list'>
           <h3  className='center'>Categories</h3>
           {this.props.categories.map((cat) => (
-              <Category key={cat.id} category={cat}/>
+            <Category key={cat.id} category={cat}/>
           ))}
         </div>
         <h3 className='center'>Your Timeline</h3>
@@ -33,8 +33,8 @@ function mapStateToProps ({ posts, categories }, props) {
   return {
     categories: categories,
     posts: posts
-      .filter((a) => a.category === category)
-      .sort((a,b) => b.timestamp - a.timestamp)
+    .filter((a) => a.category === category)
+    .sort((a,b) => b.timestamp - a.timestamp)
   }
 }
 

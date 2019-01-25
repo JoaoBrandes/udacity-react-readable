@@ -17,7 +17,7 @@ class Comment extends Component {
       voteCallback(comment)
     }
   }
-
+  
   handleDownVote = (e) => {
     e.preventDefault()
     const { comment, dispatch, voteCallback } = this.props

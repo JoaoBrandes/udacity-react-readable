@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { handleDeletePost, handleUpvotePost, handleDownvotePost } from '../actions/posts'
 import { MdArrowDownward, MdArrowUpward } from 'react-icons/md'
 
+
 class Post extends Component {
 
   handleUpVote = (e) => {

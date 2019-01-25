@@ -39,20 +39,20 @@ export default class DropDown extends Component {
 
         {
           this.state.showMenu
-            ? (
-              <div
-                className="menu"
-                ref={(element) => {
-                  this.dropdownMenu = element;
-                }}
+          ? (
+            <div
+              className="menu"
+              ref={(element) => {
+                this.dropdownMenu = element;
+              }}
               >
-                <button onClick={() => this.props.changeOrder('time')}> Time </button>
-                <button onClick={() => this.props.changeOrder('score')}> Score </button>
-              </div>
-            )
-            : (
-              null
-            )
+              <button onClick={() => this.props.changeOrder('time')}> Time </button>
+              <button onClick={() => this.props.changeOrder('score')}> Score </button>
+            </div>
+          )
+          : (
+            null
+          )
         }
       </div>
     );
